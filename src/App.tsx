@@ -4,8 +4,6 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
-import Input from '@mui/material/Input'
-
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 
@@ -32,13 +30,17 @@ interface StudentsData {
 }
 
 interface StudentsMap {
-  [p: string]: Student
+  [key: string]: Student
 }
 
 export default function App() {
   const [challengesData, setChallengesData] = useState<ChallengesData|null>(null)
   const [studentsData, setStudentsData] = useState<StudentsData|null>(null)
   const [studentsMap, setStudentsMap] = useState<StudentsMap|undefined>({})
+
+  const remapStudents = (studentList: Student[]) => {
+    return studentList.reduce((acc: StudentsMap, curr: Student) => ({ ...acc, [curr.id]: curr }), {})
+  }
 
   useEffect(() => {
     challengesService.getAll()
@@ -53,9 +55,11 @@ export default function App() {
     .then(response => {
       setStudentsData(response.data)
       // move to helper to resolve
-      const remappedStudents = response?.data?.data.reduce((acc: Object, curr: Student) => ({ ...acc, [curr.id]: curr }), {})
+      // const remappedStudents = response?.data?.data.reduce((acc: Object, curr: Student) => ({ ...acc, [curr.id]: curr }), {})
+      const remappedStudents = remapStudents(response.data?.data)
       setStudentsMap(remappedStudents)
-      console.log(remappedStudents)
+      // remapStudents()
+      // console.log(remappedStudents)
     })
     .catch(err => {
       console.error(err)
@@ -63,11 +67,11 @@ export default function App() {
 
   }, [])
 
-  const studentOptions = studentsData && studentsData?.data.map(std => (
+  const studentOptions = studentsData ? studentsData?.data.map(std => (
     <MenuItem key={std.id} value={std.id}>
       {std.name}
     </MenuItem>
-  ))
+  )) : null
 
   const handleReviewerChange = (rowId: string, studentId: string) => {
     challengesService.updateAssignee(rowId, studentId)

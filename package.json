@@ -6,6 +6,7 @@
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/material": "latest",
+    "@types/faker": "^5.5.8",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "axios": "^0.22.0",

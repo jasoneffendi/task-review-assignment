@@ -1,7 +1,14 @@
 import http from './common'
 
+import Student from '../types/Student'
+
+interface GetAllResponse {
+    data: Student[],
+    metadata: Object
+}
+
 const getAll = () => {
-  return http.get('/students')
+  return http.get<GetAllResponse>('/students')
 }
 
 
