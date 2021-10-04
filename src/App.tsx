@@ -101,8 +101,6 @@ export default function App() {
     })
   }
 
-  console.log(challengesData)
-
   return (
     <Container maxWidth='xl'>
       <Box sx={{ my: 4 }}>
